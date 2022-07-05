@@ -1,2 +1,2 @@
 # iNatOpenDownload
-downloading images from iNaturalist Open Data
+downloading images from iNaturalist Open Data by AWS
