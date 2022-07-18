@@ -39,10 +39,22 @@ rule extract_meta_data:
 #   script:
 #     "scripts/MakeiNatDB.py"
 
-# rule make_subset_url_db:
-#   input:
-#     "db/inat_open_data.sq3db"
-#   output:
-#     "csvs/{subset}_data.csv"
-#   script:
-#     "scrips/SubsetOpenData.py"
+rule make_subset_url_db:
+  input:
+    "dbs/inaturalist-open-data-20220127.sq3db"
+  output:
+    "dbs/{subset}_db.sq3db"
+  shell:
+    """
+    python scripts/SubsetOpenData.py
+    """
+
+rule create_subset_csv_files:
+  input:
+    "dbs/{subset}_db.sq3db"
+  output:
+    directory("csvs/{subset}_csvs")
+  shell:
+    """
+    python scripts/MakeSubsetCsvs.py
+    """

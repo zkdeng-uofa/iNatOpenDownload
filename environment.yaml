@@ -8,6 +8,10 @@ dependencies:
   - matplotlib =3.3
   - graphviz
   - pandas
+  - sqlalchemy
+  - pyinputplus
+  - tqdm
+  - art
   # - bcftools
   # - samtools
   # - bwa
