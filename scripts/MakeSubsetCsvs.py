@@ -2,10 +2,10 @@ import argparse
 import pandas as pd
 import sqlite3
 import os
-import pyinputplus as pyimp
+#import pyinputplus as pyimp
 import time
-import tqdm
-import art
+# import tqdm
+# import art
 import sys
 
 parser = argparse.ArgumentParser(
@@ -52,7 +52,7 @@ taxon_df = pd.read_sql_query(
     url_con
 )
 
-os.makedirs("../csvs/"+args.output_folder, exist_ok=True)
+os.makedirs("csvs/"+args.output_folder, exist_ok=True)
 for i in range(0, len(taxon_df)):
     sql = """SELECT photo_url_large, taxon_name, ancestry, extension
              FROM subset

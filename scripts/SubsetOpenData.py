@@ -2,10 +2,10 @@ import argparse
 import pandas as pd
 import sqlite3
 import os
-import pyinputplus as pyimp
+#import pyinputplus as pyimp
 import time
-import tqdm
-import art
+# import tqdm
+# import art
 import sys
 #import dask.dataframe as dd
 
