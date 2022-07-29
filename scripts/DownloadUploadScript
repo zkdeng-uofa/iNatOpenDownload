@@ -1,0 +1,6 @@
+#!/bin/bash
+read -t 0
+
+#export data_dir="csvs"
+
+python scripts/ImgDownload.py --start_index $1 --end_index $2 --input_folder $3 --data_dir $4

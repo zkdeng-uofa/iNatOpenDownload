@@ -58,3 +58,13 @@ rule create_subset_csv_files:
     """
     python scripts/MakeSubsetCsvs.py
     """
+
+rule download_upload_imgs:
+  input:
+    "csvs/{subset}_csvs"
+  output:
+    directory("imgs/{subset}_imgs")
+  shell:
+    "bash scripts/DownloadUploadScript 1 5 {wildcards.subset}_csvs imgs/{wildcards.subset}_imgs"
+
+

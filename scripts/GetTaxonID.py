@@ -54,3 +54,4 @@ taxon_df = pd.read_sql_query(
 )
 
 print(taxon_df)
+print(taxon_df['ancestry'][0])

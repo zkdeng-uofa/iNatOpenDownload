@@ -9,7 +9,8 @@ dependencies:
   # - graphviz
   - pandas
   - sqlalchemy
-  # - tqdm
+  - img2dataset
+  - tqdm
   # - art
   # - bcftools
   # - samtools
