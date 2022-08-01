@@ -14,13 +14,13 @@ import sys
 parser = argparse.ArgumentParser('Input which imgs from csv files to download')
 parser.add_argument(
   '--start_index',
-   type = int,
-   default = 1
+  type = int,
+  default = 1
 )
 parser.add_argument(
   '--end_index',
-   type = int,
-   default = 100
+  type = int,
+  default = 10
 )
 parser.add_argument(
   '--input_folder',
@@ -28,8 +28,14 @@ parser.add_argument(
 )
 parser.add_argument(
   '--data_dir',
-   type = str
+  type = str
 )
+parser.add_argument(
+  '--all_data',
+  type = str,
+  default = 'false'
+)
+
 args = parser.parse_args()
 
 # if not len(sys.argv) > 1:
@@ -95,7 +101,11 @@ def checking_conditions(number_of_csvs=0):
     assert args.start_index >= 0, 'start index can not be negative'
     assert args.end_index >= 0  , 'end index can not be negative'
 
-def main(start_index=0, end_index=10, data_dir=''):
+def main(start_index=0, end_index=10, data_dir='', all_data='false'):
+  if args.all_data == 'true':
+    args.start_index = 1
+    args.end_index = len(df_csv_list)
+
   save_csv_list()
   df_csv_list = pd.read_csv(csv_list_path, index_col=0)
 
@@ -150,4 +160,4 @@ def main(start_index=0, end_index=10, data_dir=''):
   return tar_name
 
 if __name__ == '__main__':
-    tar_name = main(start_index=args.start_index, end_index=args.end_index, data_dir=args.data_dir)
+  tar_name = main(start_index=args.start_index, end_index=args.end_index, data_dir=args.data_dir, all_data=args.all_data)

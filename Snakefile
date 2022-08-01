@@ -55,16 +55,23 @@ rule create_subset_csv_files:
   output:
     directory("csvs/{subset}_csvs")
   shell:
-    """
-    python scripts/MakeSubsetCsvs.py
-    """
+    "python scripts/MakeSubsetCsvs.py --input_db {wildcards.subset}_db.sq3db --output_folder {wildcards.subset}_csvs"
 
-rule download_upload_imgs:
+
+rule download_upload_imgs_range:
   input:
     "csvs/{subset}_csvs"
   output:
-    directory("imgs/{subset}_imgs")
+    directory("imgs/{subset}_{min}_{max}_imgs")
   shell:
-    "bash scripts/DownloadUploadScript 1 5 {wildcards.subset}_csvs imgs/{wildcards.subset}_imgs"
+    "bash scripts/DownloadUploadScript -s {wildcards.min} -e {wildcards.max} -i {wildcards.subset}_csvs -o imgs/{wildcards.subset}_{wildcards.min}_{wildcards.max}_imgs"
+
+rule download_upload_imgs_all:
+  input:
+    "csvs/{subset}_csvs"
+  output:
+    directory("imgs/{subset}_all-imgs")
+  shell:
+    "bash scripts/DownloadUploadScript -i {wildcards.subset}_csvs -o imgs/{wildcards.subset}_all-imgs -a true"
 
 

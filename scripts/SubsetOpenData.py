@@ -13,6 +13,11 @@ parser = argparse.ArgumentParser(
   description = 'Enter an ancestry to create a subset db'
 )
 parser.add_argument(
+  '--taxon_name',
+   type = str,
+   help = 'The taxon name you want to subset'
+)
+parser.add_argument(
   '--ancestry_string',
    type = str,
    help = 'The ancestry string that is used in the SQL query'
@@ -50,32 +55,54 @@ parser.add_argument(
 args = parser.parse_args()
 
 if not len(sys.argv) > 1:
+  # while True:
+  #   try:
+  #     args.ancestry_string = input('Enter an ancestry query string (i.e. 48460/1/47120/372739/%): ')
+  #     break
+
+  #   except ValueError:
+  #     print("Incorrect Input")
+  # print(f'Your input ancestry string is {args.ancestry_string}\n')
+
+  # while True:
+  #   try:
+  #     args.csv_name = input('Enter a csv name (i.e. subset_data): ')
+  #     break
+
+  #   except ValueError:
+  #     print("Incorrect Input")
+  # print(f'Your input csv name is {args.csv_name}.csv\n')
+
+  # while True:
+  #   try:
+  #     args.output_db = input('Enter a output database name (i.e. insect_species.sq3db): ')
+  #     break
+
+  #   except ValueError:
+  #     print("Incorrect Input")
+  # print(f'Your database name is {args.output_db}\n')
+
   while True:
     try:
-      args.ancestry_string = input('Enter an ancestry query string (i.e. 48460/1/47120/372739/%): ')
+      args.taxon_name = input('Enter a taxon name (i.e. Cigaritis): ')
       break
 
     except ValueError:
       print("Incorrect Input")
-  print(f'Your input ancestry string is {args.ancestry_string}\n')
+  print(f'Your taxon name is {args.taxon_name}\n')
+
+  args.taxon_name = args.taxon_name
+  args.csv_name = f'{args.taxon_name.replace(" ", "_")}'
+  args.output_db = f'{args.taxon_name.replace(" ", "_")}_db.sq3db'
 
   while True:
     try:
-      args.csv_name = input('Enter a csv name (i.e. subset_data): ')
+      args.input_db = input('Enter an input database: ')
       break
 
     except ValueError:
       print("Incorrect Input")
-  print(f'Your input csv name is {args.csv_name}.csv\n')
-
-  while True:
-    try:
-      args.output_db = input('Enter a output database name (i.e. insect_species.sq3db): ')
-      break
-
-    except ValueError:
-      print("Incorrect Input")
-  print(f'Your database name is {args.output_db}\n')
+  print(f'Your taxon name is {args.input_db}\n')
 
   while True:
     try:
@@ -85,6 +112,17 @@ if not len(sys.argv) > 1:
     except ValueError:
       print("Incorrect Input")
   print(f'Your input rank is {args.rank}\n')
+
+
+taxon_df = pd.read_sql_query(
+  "SELECT * "
+  "FROM taxa "
+  "WHERE name = '"+args.taxon_name+"' "
+  "LIMIT 10 ",
+  con = "sqlite:///dbs/"+args.input_db
+)
+
+args.ancestry_string = f'{taxon_df["ancestry"][0]}/%'
 
 
 url_df = pd.read_sql_query(
