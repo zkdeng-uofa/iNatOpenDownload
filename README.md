@@ -26,13 +26,13 @@
 
 
 <!-- PROJECT LOGO -->
-<br />
+<!-- <br />
 <div align="center">
-  <!--<a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/github_username/repo_name">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>-->
+  </a> -->
 
-<h2 align="center">iNaturalist Open Download</h3>
+<h2 align="center">iNaturalist Open Download</h2>
 
   <p align="center">
     Python scripts to easily download images form the iNaturalist Open Data dataset
@@ -122,7 +122,7 @@ Conda is an open source package distributer and manager. This project uses conda
 * <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html">Conda Installation Page</a> 
 
 The iNaturalist open dataset is stored on Amazon Web Services (AWS). As such the AWS Command Line Interfance (AWS CLI) is required to use this script. 
-* <a href=" https://docs.aws.amazon.com/cli/v1/userguide/install-macos.html">AWS CLI</a>
+* <a href="https://docs.aws.amazon.com/cli/v1/userguide/install-macos.html">AWS CLI</a>
 
 ``` sh
 curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
@@ -203,7 +203,7 @@ Please consult zkdeng@arizona.edu for use.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - Zi Deng - zkdeng@arizona.edu
+Your Name: Zi Deng - zkdeng@arizona.edu
 
 Project Link: [https://github.com/zkdeng-uofa/iNatOpenDownload](https://github.com/zkdeng-uofa/iNatOpenDownload)
 
