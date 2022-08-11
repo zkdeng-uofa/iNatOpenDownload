@@ -144,11 +144,15 @@ sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
    ``` sh 
    conda env create --name iNatOpenDownload --file environment.yaml
    ```
-4. Install other required packages through pip.
+4. Activate the the new conda environment
+   ``` sh
+   conda activate iNatOpenDownload
+   ```
+5. Install other required packages through pip.
    ``` sh
    pip install -r requirements.txt
    ```
-5. Use snakemake to download and create the iNaturalist open data sqlite database. 
+6. Use snakemake to download and create the iNaturalist open data sqlite database. 
    ```
    snakemake -c1
    ```
