@@ -2,7 +2,8 @@ rule all:
   input:
     # "awscliv2.zip",
     "inaturalist-open-data-latest.tar.gz",
-    "csvs/inat_meta_data"
+    "csvs/inat_meta_data",
+    "dbs/inat_open_data.sq3db"
 
 rule download_meta_data:
   output:
@@ -31,17 +32,17 @@ rule extract_meta_data:
     tar -xvf inaturalist-open-data-latest.tar.gz -C csvs/inat_meta_data --strip-components 1
     """
 
-# rule make_inat_db:
-#   input:
-#     "inat_meta_data"
-#   output:
-#     "db/inat_open_data.sq3db"
-#   script:
-#     "scripts/MakeiNatDB.py"
+rule make_inat_db:
+  input:
+    "csvs/inat_meta_data"
+  output:
+    "dbs/inat_open_data.sq3db"
+  script:
+    "scripts/MakeiNatDB.py"
 
 rule make_subset_url_db:
   input:
-    "dbs/inaturalist-open-data-20220127.sq3db"
+    "dbs/inat_open_data.sq3db"
   output:
     "dbs/{subset}_db.sq3db"
   shell:
@@ -64,7 +65,7 @@ rule download_upload_imgs_range:
   output:
     directory("imgs/{subset}_{min}_{max}_imgs")
   shell:
-    "bash scripts/DownloadUploadScript -s {wildcards.min} -e {wildcards.max} -i {wildcards.subset}_csvs -o imgs/{wildcards.subset}_{wildcards.min}_{wildcards.max}_imgs"
+    "bash scripts/DownloadUploadScript -s {wildcards.min} -e {wildcards.max} -i csvs/{wildcards.subset}_csvs -o imgs/{wildcards.subset}_{wildcards.min}_{wildcards.max}_imgs"
 
 rule download_upload_imgs_all:
   input:
@@ -72,6 +73,6 @@ rule download_upload_imgs_all:
   output:
     directory("imgs/{subset}_all-imgs")
   shell:
-    "bash scripts/DownloadUploadScript -i {wildcards.subset}_csvs -o imgs/{wildcards.subset}_all-imgs -a true"
+    "bash scripts/DownloadUploadScript -i csvs/{wildcards.subset}_csvs -o imgs/{wildcards.subset}_all-imgs -a true"
 
 

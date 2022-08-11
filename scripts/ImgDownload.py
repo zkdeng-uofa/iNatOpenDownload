@@ -77,10 +77,15 @@ args = parser.parse_args()
 
 os.makedirs(args.data_dir, exist_ok=True)
 csv_list_path = f'{args.data_dir}/csv_list.csv'
-
+# taxon_name = args.input_folder[5:]
+# taxon_name = taxon_name[::-1]
+# taxon_name = taxon_name[5:]
+# taxon_name = taxon_name[::-1]
+# print(taxon_name)
+# csv_list_path = f'csvs/{taxon_name}.csv'
 def save_csv_list():
   if not os.path.exists(csv_list_path):
-    csv_list = glob(f'csvs/{args.input_folder}/*.csv')
+    csv_list = glob(f'{args.input_folder}/*.csv')
 
     df = pd.DataFrame(csv_list, columns=['csv_list'])
     df.csv_list = df.csv_list.map(lambda x: x.replace(f'csvs/{args.input_folder}/',''))
@@ -102,12 +107,15 @@ def checking_conditions(number_of_csvs=0):
     assert args.end_index >= 0  , 'end index can not be negative'
 
 def main(start_index=0, end_index=10, data_dir='', all_data='false'):
+  save_csv_list()
+  df_csv_list = pd.read_csv(csv_list_path, index_col=0)
+
   if args.all_data == 'true':
     args.start_index = 1
     args.end_index = len(df_csv_list)
+    print(args.end_index)
 
-  save_csv_list()
-  df_csv_list = pd.read_csv(csv_list_path, index_col=0)
+
 
   tar_name = f'{args.start_index}_{args.end_index}.tar.gz'
   tar = tarfile.open(f'{os.path.abspath(args.data_dir)}/{tar_name}', "w:gz")
@@ -125,9 +133,10 @@ def main(start_index=0, end_index=10, data_dir='', all_data='false'):
   for i in tqdm(df_csv_list.loc[index_list, 'csv_list']):
     try:
       #print(index_list)
-      csv_dir = f'csvs/{args.input_folder}/{i}'
+      #csv_dir = f'csvs/{args.input_folder}/{i}'
+
+      csv_dir = f'{i}'
       print(csv_dir)
-      #csv_dir = f'{i}'
       df = pd.read_csv(csv_dir)
 
       output_folder = f'{args.data_dir}/{df.loc[0, "taxon_name"]}'

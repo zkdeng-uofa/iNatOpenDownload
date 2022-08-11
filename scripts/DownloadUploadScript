@@ -3,12 +3,12 @@
 
 #export data_dir="csvs"
 
-export a=false
+export all=false
 export min=1
 export max=10
 # export in=test
 
-while getopts i:o:s:e:a flag
+while getopts i:o:s:e:a: flag
 do
     case "${flag}" in
         i) in=${OPTARG};;
@@ -19,7 +19,8 @@ do
     esac
 done
 
-if [[ "$a" == false ]]; then
+if [ $all == "false" ]
+then
   python scripts/ImgDownload.py --start_index $min --end_index $max --input_folder $in --data_dir $out
 else
   python scripts/ImgDownload.py --start_index $min --end_index $max --input_folder $in --data_dir $out --all_data $all
