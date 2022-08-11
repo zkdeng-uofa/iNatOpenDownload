@@ -208,7 +208,7 @@ Please consult zkdeng@arizona.edu for use.
 <!-- CONTACT -->
 ## Contact
 
-Your Name: Zi Deng - zkdeng@arizona.edu
+Zi Deng - zkdeng@arizona.edu
 
 Project Link: [https://github.com/zkdeng-uofa/iNatOpenDownload](https://github.com/zkdeng-uofa/iNatOpenDownload)
 
