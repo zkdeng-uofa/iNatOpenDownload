@@ -35,7 +35,7 @@
 <h2 align="center">iNaturalist Open Download</h3>
 
   <p align="center">
-    Python scripts to easily download images form the iNaturalist Open Data project
+    Python scripts to easily download images form the iNaturalist Open Data dataset
     <br />
     <!--<a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>-->
     <br />
@@ -83,7 +83,13 @@
 
 <!--[![Product Name Screen Shot][product-screenshot]](https://example.com)-->
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+
+iNaturalist is a citizen science platform where users can upload photographs of specific organisms. As a result iNaturalist contains one of the world's largest stores of images of living organisms. The iNaturalist Open Data project is a curated subset of the overall iNaturalist dataset that specifically contains images that apply to the Creative Commons licsense. It was created specifically to aid researchers by providing over 70 million photos of living organisms.
+<br />
+
+<a href="https://github.com/inaturalist/inaturalist-open-data">iNaturalist Open Data</a>
+
+This project, iNaturalist Open Download, aims to create a simple scipt to download the images that are associated with a specific taxonomy rank in the iNaturalist format. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -107,15 +113,21 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This project uses the <a href="https://snakemake.github.io/">Snakemake</a> framework to create easy to use and reproducible workflows. A variety of snakemake rules are combined with user input to acquire the desired images. 
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+Conda is an open source package distributer and manager. It is the primary way this projects uses to install packages.
+
+* <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html">Conda Installation Page</a> 
+
+The iNaturalist open dataset is stored on Amazon Web Services (AWS). As such the AWS Command Line Interfance (AWS CLI) is required to use this script. 
+* <a href=" https://docs.aws.amazon.com/cli/v1/userguide/install-macos.html">AWS CLI</a>
+
   ```sh
-  npm install npm@latest -g
+curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+unzip awscli-bundle.zip
+sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
   ```
 
 ### Installation
