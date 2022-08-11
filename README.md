@@ -117,109 +117,104 @@ This project uses the <a href="https://snakemake.github.io/">Snakemake</a> frame
 
 ### Prerequisites
 
-Conda is an open source package distributer and manager. It is the primary way this projects uses to install packages.
+Conda is an open source package distributer and manager. This project uses conda to install packages.
 
 * <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html">Conda Installation Page</a> 
 
 The iNaturalist open dataset is stored on Amazon Web Services (AWS). As such the AWS Command Line Interfance (AWS CLI) is required to use this script. 
 * <a href=" https://docs.aws.amazon.com/cli/v1/userguide/install-macos.html">AWS CLI</a>
 
-  ```sh
+``` sh
 curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
 unzip awscli-bundle.zip
 sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-  ```
+```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
+1. Clone the repository.
+   ``` sh
+   git clone https://github.com/zkdeng-uofa/iNatOpenDownload
    ```
-3. Install NPM packages
-   ```sh
-   npm install
+2. Move into the iNatOpenDownload folder.
+   ``` sh
+   cd /path/to/iNatOpenDownload
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. Create a conda environment that contains pip and snakemake using the requirement.yaml file. 
+   ``` sh 
+   conda env create --name iNatOpenDownload --file environment.yaml
+   ```
+4. Install other required packages through pip.
+   ``` sh
+   pip install -r requirements.txt
+   ```
+5. Use snakemake to download and create the iNaturalist open data sqlite database. 
+   ```
+   snakemake -c1
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+The iNaturalist open download script uses a sequence of consecutive snakemake rules to download the final images. As the user of the script a simple command plus user input will download the images of interest.
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+#### All Images
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+This snakemake rule downloads all images associated with a particular taxonomy.
+
+-The basic usage requires the user to use the snakemake command combined with a proper folder name of the taxonomy rank of interest
+``` sh
+snakemake imgs/[taxonomy_rank]_all-imgs -c1
+```
+-This will prompt the proper snakemake rules to activate and respective scripts to run.
+
+-The user will prompted to enter a taxonomy rank, input database file, and rank level of images to download
+```sh
+Enter a taxon name (i.e. Cigaritis): [taxonomy_name]
+Your taxon name is [taxonomy_name]
+
+Enter an input database (i.e. inat_open_data.sq3db): [input data base]
+Your taxon name is [input data base]
+
+Enter a rank (i.e. species): [rank level]
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Upload onto Cyverse data stores
+- [ ] Bash script looping for image downloads that are very large
+- [	] Improved job scheduler and tracking during csv creation, image downloading and image uploading. (Explore different options)
+- [ ] Subspecies nested into species when downloading
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<!-- CONTRIBUTING 
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
-
 
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
+Please consult zkdeng@arizona.edu for use.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Your Name - Zi Deng - zkdeng@arizona.edu
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/zkdeng-uofa/iNatOpenDownload](https://github.com/zkdeng-uofa/iNatOpenDownload)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
-
+* University of Arizona Data Science Institute
+* Nirav Merchant - nirav@arizona.edu
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
