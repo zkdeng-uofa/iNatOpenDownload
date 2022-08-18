@@ -2,3 +2,4 @@ img2dataset
 pandas
 sqlalchemy
 tqdm
+pyyaml 

@@ -6,6 +6,7 @@ import time
 # import tqdm
 # import art
 import sys
+import yaml
 
 parser = argparse.ArgumentParser(
   description = 'Enter a db to create csv folder'
@@ -61,7 +62,22 @@ for i in range(0, len(taxon_df)):
     if not os.path.exists('csvs/' + args.output_folder):
       os.mkdir('csvs/' + args.output_folder)
     taxon_name = taxon_df['taxon_name'][i].replace('/', ' ')
-    path = 'csvs/' + args.output_folder + '/' + taxon_name + '.csv'
+    path = 'csvs/' + args.output_folder + '/' + taxon_name.replace(" ", "_") + '.csv'
 
     #print(path)
     photo_df.to_csv(path, index=False)
+
+taxon_name = args.output_folder
+taxon_name = taxon_name[::-1]
+taxon_name = taxon_name[5:]
+taxon_name = taxon_name[::-1]
+
+param_data = [
+  {'taxon_name': taxon_name},
+  {'start_index': 1},
+  {'end_index': len(taxon_df)}
+]
+
+with open(f'yaml/{taxon_name}.yaml', 'w') as file:
+    documents = yaml.dump(param_data, file)
+  

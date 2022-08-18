@@ -1,3 +1,5 @@
+import os
+
 rule all:
   input:
     # "awscliv2.zip",
@@ -72,7 +74,62 @@ rule download_upload_imgs_all:
     "csvs/{subset}_csvs"
   output:
     directory("imgs/{subset}_all-imgs")
+
   shell:
     "bash scripts/DownloadUploadScript -i csvs/{wildcards.subset}_csvs -o imgs/{wildcards.subset}_all-imgs -a true"
 
+# for i in range(1, 10):
+#   rule:
+#     input: "dbs/inat_open_data.sq3db"
+#     output: f"yaml/test_folder_{i}"
+#     params: len = i
+#     shell: "python scripts/yaml_test.py --input {wildcards.i}"
 
+# rule:
+#   input: 
+#   output: "stats.yaml"
+
+# rule download_stats:
+#   input: "stats.yaml"
+
+# def get_all_csvs(wildcards):
+#   csv_list = []
+#   path = 'csvs/Megapis_csvs/'
+#   for i in os.listdir(path):
+#     if i.endswith(".csv"):
+#       csv_list.append(path + i)
+#   return csv_list
+
+def get_all_csvs(wildcards):
+  folder_list = []
+  path = f'csvs/{wildcards.subset}_csvs/'
+  for i in os.listdir(path):
+    if i.endswith(".csv"):
+      taxon_name = i[::-1]
+      taxon_name = taxon_name[4:]
+      taxon_name = taxon_name[::-1]
+      folder_path = f'imgs/{wildcards.subset}_all-imgs/{taxon_name}'
+      folder_list.append(folder_path.replace(" ", "_"))
+      # taxon_name = taxon_name[::-1]
+  return folder_list
+# taxon_name = taxon_name[5:]
+
+rule multi_download_test:
+  input:
+    "csvs/{subset}_csvs"
+  output:
+    directory("imgs/{subset}_all-imgs/{species}")
+  
+  shell:
+    "python scripts/SpeciesImgDownload.py --input_folder csvs/{wildcards.subset}_csvs --input_csv csvs/{wildcards.subset}_csvs/{wildcards.species}.csv --data_dir imgs/{wildcards.subset}_all-imgs"
+
+  # shell:
+  #   "mkdir imgs/Megapis_all-imgs/{wildcards.species}"
+
+rule aggregate_test:
+  input:
+    get_all_csvs
+  output:
+    directory("imgs/{subset}_agg_imgs")
+  shell: 
+    "mkdir imgs/{wildcards.subset}_agg_imgs"

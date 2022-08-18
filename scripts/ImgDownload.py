@@ -141,14 +141,14 @@ def main(start_index=0, end_index=10, data_dir='', all_data='false'):
 
       output_folder = f'{args.data_dir}/{df.loc[0, "taxon_name"]}'
 
-      img2dataset.download(processes_count=16,
-                           thread_count=32,
+      img2dataset.download(processes_count=1,
+                           thread_count=512,
                            url_list=csv_dir,
                            output_folder=output_folder,
                            output_format='webdataset',
                            input_format='csv',
                            url_col='photo_url_large',
-                           number_sample_per_shard=200000,
+                           number_sample_per_shard=1000000,
                            distributor='multiprocessing',
                            resize_mode='no')
       tar.add(os.path.abspath(output_folder), arcname=df.loc[0, 'taxon_name'])
