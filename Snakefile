@@ -133,3 +133,15 @@ rule aggregate_test:
     directory("imgs/{subset}_agg_imgs")
   shell: 
     "mkdir imgs/{wildcards.subset}_agg_imgs"
+
+rule cyverse_csv_upload:
+  input: 
+    "csvs/{subset}_csvs"
+  output:
+    "yaml/{subset}_upload.yaml"
+  shell:
+    """
+    iput -rPT csvs/{wildcards.subset}_csvs /iplant/home/shared/soynomics/inaturalist/metadata/{wildcards.subset}_csvs
+    echo "Upload Finished" > yaml/{wildcards.subset}_upload.yaml
+    """
+
