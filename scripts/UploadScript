@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "enter start_index end_index and data_dir respectively"
+
+read -t 0 
+
+export data_dir="/dev/shm/inaturalist"
+python download.py --start_index $1 --end_index $2 --data_dir $data_dir
+
+
+#export ds_dir="/iplant/home/shared/soynomics/inaturalist/insecta_images_compressed_full/"
+export ds_dir="/iplant/home/shared/soynomics/inaturalist/insecta_images_compressed_subspecies"
+export local_dir="${data_dir}/$1_$2.tar.gz"
+
+iput -f $local_dir $ds_dir
+
+rm -rf $local_dir

@@ -1,0 +1,17 @@
+Script started on Mon Aug 22 17:58:21 2022
+[1m[7m%[27m[1m[0m                                                                                                                   ]633;D]633;P;Cwd=/Users/zideng/Documents/Data_Institute/github/iNatOpenDownload[0m[27m[24m[J]633;A(base) zideng@Zis-MacBook-Pro iNatOpenDownload % ]633;B[K[?2004hlls[?2004l
+]633;C]633;E;lsREADME.md				imgs
+Snakefile				inaturalist-open-data-latest.tar.gz
+csvs					requirements.txt
+dag.pdf					scripts
+dbs					typescript
+environment.yaml			yaml
+[1m[7m%[27m[1m[0m                                                                                                                   ]633;D;0]633;P;Cwd=/Users/zideng/Documents/Data_Institute/github/iNatOpenDownload[0m[27m[24m[J]633;A(base) zideng@Zis-MacBook-Pro iNatOpenDownload % ]633;B[K[?2004hccd scripts[1m/[0m[0m [?2004l
+]633;C]633;E;cd scripts[1m[7m%[27m[1m[0m                                                                                                                   ]633;D;0]633;P;Cwd=/Users/zideng/Documents/Data_Institute/github/iNatOpenDownload/scripts[0m[27m[24m[J]633;A(base) zideng@Zis-MacBook-Pro scripts % ]633;B[K[?2004hlls[?2004l
+]633;C]633;E;lsDownloadUploadScript	MakeSubsetCsvs.py	SpeciesImgDownload.py
+GetTaxonID.py		MakeiNatDB.py		SubsetOpenData.py
+ImgDownload.py		README.md		yaml_test.py
+[1m[7m%[27m[1m[0m                                                                                                                   ]633;D;0]633;P;Cwd=/Users/zideng/Documents/Data_Institute/github/iNatOpenDownload/scripts[0m[27m[24m[J]633;A(base) zideng@Zis-MacBook-Pro scripts % ]633;B[K[?2004hmmkdir MoveToDevDisk[P[14C [15D[P[14C [15D[P[14C [15Dm[P[14C [15D[P[14C [15Dc MoveToDevDisk[14Dco MoveToDevDisk[14Dd MoveToDevDisk[14De MoveToDevDisk[14D[?2004l
+]633;C]633;E;code MoveToDevDisk[1m[7m%[27m[1m[0m                                                                                                                   ]633;D;0]633;P;Cwd=/Users/zideng/Documents/Data_Institute/github/iNatOpenDownload/scripts[0m[27m[24m[J]633;A(base) zideng@Zis-MacBook-Pro scripts % ]633;B[K[?2004hUUpload    U  mmkdir   m  ccode UploadScript[?2004l
+]633;C]633;E;code UploadScript[1m[7m%[27m[1m[0m                                                                                                                   ]633;D;0]633;P;Cwd=/Users/zideng/Documents/Data_Institute/github/iNatOpenDownload/scripts[0m[27m[24m[J]633;A(base) zideng@Zis-MacBook-Pro scripts % ]633;B[K[?2004hccode UploadScriptLoop[?2004l
+]633;C]633;E;code UploadScriptLoop[1m[7m%[27m[1m[0m                                                                                                                   ]633;D;0]633;P;Cwd=/Users/zideng/Documents/Data_Institute/github/iNatOpenDownload/scripts[0m[27m[24m[J]633;A(base) zideng@Zis-MacBook-Pro scripts % ]633;B[K[?2004h

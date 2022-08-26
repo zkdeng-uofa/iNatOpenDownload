@@ -1,0 +1,20 @@
+#!/bin/bash
+
+read -t 0
+
+export num_csvs=100
+
+i=$1
+
+#for n in {1..$2} #200}
+
+while [ $i -lt $2 ]
+do
+        i2=$((i+num_csvs-1))
+
+        echo -ne "\n\n ###" progress=$((100*n/200))%       "<=>"     "csv-index-range=[$i:$i2]  ### \n\n"
+
+        bash script $i $i2
+ 
+        ((i += $num_csvs))
+done

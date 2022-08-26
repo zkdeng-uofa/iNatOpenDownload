@@ -1,0 +1,16 @@
+#!/bin/bash
+
+export source_dir="/home/u21/zkdeng/SpeciesCSVs.zip"
+#export source_dir="/home/u21/zkdeng/subset_csvs.zip"
+export dest_dir="/dev/shm/inaturalist"
+
+mkdir $dest_dir
+
+cp $source_dir $dest_dir/
+
+cd $dest_dir
+
+unzip $dest_dir/SpeciesCSVs.zip 
+
+#mv SpeciesCSVs species_csv
+mv subset_csvs species_csv
