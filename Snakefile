@@ -30,8 +30,8 @@ rule extract_meta_data:
     directory("csvs/inat_meta_data")
   shell:
     """
-    mkdir csvs/inat_meta_data
-    tar -xvf inaturalist-open-data-latest.tar.gz -C csvs/inat_meta_data --strip-components 1
+    mkdir {output}
+    tar -xvf {input} -C csvs/inat_meta_data --strip-components 1
     """
 
 rule make_inat_db:
@@ -58,47 +58,7 @@ rule create_subset_csv_files:
   output:
     directory("csvs/{subset}_csvs")
   shell:
-    "python scripts/MakeSubsetCsvs.py --input_db {wildcards.subset}_db.sq3db --output_folder {wildcards.subset}_csvs"
-
-
-rule download_upload_imgs_range:
-  input:
-    "csvs/{subset}_csvs"
-  output:
-    directory("imgs/{subset}_{min}_{max}_imgs")
-  shell:
-    "bash scripts/DownloadUploadScript -s {wildcards.min} -e {wildcards.max} -i csvs/{wildcards.subset}_csvs -o imgs/{wildcards.subset}_{wildcards.min}_{wildcards.max}_imgs"
-
-rule download_upload_imgs_all:
-  input:
-    "csvs/{subset}_csvs"
-  output:
-    directory("imgs/{subset}_all-imgs")
-
-  shell:
-    "bash scripts/DownloadUploadScript -i csvs/{wildcards.subset}_csvs -o imgs/{wildcards.subset}_all-imgs -a true"
-
-# for i in range(1, 10):
-#   rule:
-#     input: "dbs/inat_open_data.sq3db"
-#     output: f"yaml/test_folder_{i}"
-#     params: len = i
-#     shell: "python scripts/yaml_test.py --input {wildcards.i}"
-
-# rule:
-#   input: 
-#   output: "stats.yaml"
-
-# rule download_stats:
-#   input: "stats.yaml"
-
-# def get_all_csvs(wildcards):
-#   csv_list = []
-#   path = 'csvs/Megapis_csvs/'
-#   for i in os.listdir(path):
-#     if i.endswith(".csv"):
-#       csv_list.append(path + i)
-#   return csv_list
+    "python scripts/MakeSubsetCsvs.py --input_db {input} --output_folder {output}"
 
 def get_all_csvs(wildcards):
   folder_list = []
@@ -110,26 +70,64 @@ def get_all_csvs(wildcards):
       taxon_name = taxon_name[::-1]
       folder_path = f'imgs/{wildcards.subset}_all-imgs/{taxon_name}'
       folder_list.append(folder_path.replace(" ", "_"))
-      # taxon_name = taxon_name[::-1]
-  return folder_list
-# taxon_name = taxon_name[5:]
+  return folder_list 
 
-rule multi_download_test:
+def get_range_csvs(wildcards):
+  folder_list = []
+  path = f'csvs/{wildcards.subset}_csvs/'
+  for i, val in enumerate(os.listdir(path)):
+    if (i-1 >= int(wildcards.min)) & (i-1 <= int(wildcards.max)):
+      if val.endswith(".csv"):
+        taxon_name = val[::-1]
+        taxon_name = taxon_name[4:]
+        taxon_name = taxon_name[::-1]
+        folder_path = f'imgs/{wildcards.subset}_{wildcards.min}-{wildcards.max}/{taxon_name}'
+        folder_list.append(folder_path.replace(" ", "_"))
+  return folder_list 
+
+rule all_species_download:
   input:
-    "csvs/{subset}_csvs"
+    "csvs/{subset}_csvs",
   output:
     directory("imgs/{subset}_all-imgs/{species}")
-  
   shell:
-    "python scripts/SpeciesImgDownload.py --input_folder csvs/{wildcards.subset}_csvs --input_csv csvs/{wildcards.subset}_csvs/{wildcards.species}.csv --data_dir imgs/{wildcards.subset}_all-imgs"
+    "python scripts/SpeciesImgDownload.py" 
+    " --input_folder {input}"
+    " --input_csv {input}/{wildcards.species}.csv"
+    " --data_dir imgs/{wildcards.subset}_all-imgs"
 
-  # shell:
-  #   "mkdir imgs/Megapis_all-imgs/{wildcards.species}"
-
-rule aggregate_test:
+rule download_upload_imgs_all:
   input:
     get_all_csvs
   output:
-    directory("imgs/{subset}_agg_imgs")
-  shell: 
-    "mkdir imgs/{wildcards.subset}_agg_imgs"
+    "yaml/{subset}_all-imgs.yaml"
+  shell:
+    "echo 'Download Complete' > {output}"
+
+rule range_species_download:
+  input:
+    "csvs/{subset}_csvs",
+  output:
+    directory("imgs/{subset}_{min}-{max}/{species}")
+  shell:
+    "python scripts/SpeciesImgDownload.py"
+    " --input_folder {input}"
+    " --input_csv {input}/{wildcards.species}.csv"
+    " --data_dir imgs/{wildcards.subset}_{wildcards.min}-{wildcards.max}"
+
+rule download_upload_imgs_range:
+  input:
+    get_range_csvs
+  output:
+    "yaml/{subset}_{min}-{max}.yaml"
+  shell:
+    "echo 'Download Complete' > {output}"
+
+rule tar_imgs:
+  input:
+    "yaml/{img_folder}.yaml"
+  output:
+    "tar_files/{img_folder}/{img_folder}.tar.gz"
+  shell:
+    "python scripts/TarImgs.py"
+    " --img_folder {wildcards.img_folder}"

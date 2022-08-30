@@ -44,7 +44,7 @@ if not len(sys.argv) > 1:
       print("Incorrect Input")
   print(f'Your output folder is {args.output_folder}\n')
 
-url_con = sqlite3.connect("dbs/"+args.input_db)
+url_con = sqlite3.connect(args.input_db)
 
 taxon_df = pd.read_sql_query(
     "SELECT DISTINCT taxon_name "
@@ -52,22 +52,24 @@ taxon_df = pd.read_sql_query(
     url_con
 )
 
-os.makedirs("csvs/"+args.output_folder, exist_ok=True)
+# os.makedirs("csvs/"+args.output_folder, exist_ok=True)
+os.makedirs(args.output_folder, exist_ok=True)
 for i in range(0, len(taxon_df)):
     sql = """SELECT photo_url_large, taxon_name, ancestry, extension
              FROM subset
              WHERE taxon_name = ? """
     photo_df = pd.read_sql_query(sql, url_con, params=[taxon_df['taxon_name'][i]])
 
-    if not os.path.exists('csvs/' + args.output_folder):
-      os.mkdir('csvs/' + args.output_folder)
+    if not os.path.exists(args.output_folder):
+      os.mkdir(args.output_folder)
     taxon_name = taxon_df['taxon_name'][i].replace('/', ' ')
-    path = 'csvs/' + args.output_folder + '/' + taxon_name.replace(" ", "_") + '.csv'
+    path = args.output_folder + '/' + taxon_name.replace(" ", "_") + '.csv'
 
     #print(path)
     photo_df.to_csv(path, index=False)
 
 taxon_name = args.output_folder
+taxon_name = taxon_name[4:]
 taxon_name = taxon_name[::-1]
 taxon_name = taxon_name[5:]
 taxon_name = taxon_name[::-1]
