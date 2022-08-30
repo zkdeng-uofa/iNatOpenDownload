@@ -131,3 +131,23 @@ rule tar_imgs:
   shell:
     "python scripts/TarImgs.py"
     " --img_folder {wildcards.img_folder}"
+  
+rule cyverse_csv_upload:
+  input:
+    "csvs/{subset}_csvs"
+  output:
+    "yaml/{subset}_upload.yaml"
+  shell:
+    """
+    echo 'Upload Complete' > {output}
+    iput -rfPT {input} /iplant/home/shared/soynomics/inaturalist/iNatOpenDownload/{wildcards.subset}_csvs
+    """
+
+rule cyverse_csv_download:
+  output:
+    "yaml/{subset}_cyverse_download.yaml"
+  shell:
+    """
+    echo "Download Complete" > {output}
+    iget -rfPT /iplant/home/shared/soynomics/inaturalist/iNatOpenDownload/{wildcards.subset}_csvs csvs/{wildcards.subset}_csvs
+    """
