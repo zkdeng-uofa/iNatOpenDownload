@@ -194,9 +194,8 @@ snakemake tar_files/[taxonomy_rank]_all-imgs/[taxonomy_rank]_all-imgs.tar.gz --c
 
 - [ ] Upload onto Cyverse data stores
 - [ ] Bash script looping for image downloads that are very large
-- [	] Improved job scheduler and tracking during csv creation, image downloading and image uploading. (Explore different options)
-- [ ] Subspecies nested into species when downloading
 - [ ] Further updates of the README (img range functionality)
+- [ ] Update flag that downloads newly added images from iNaturalist Open Data
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
