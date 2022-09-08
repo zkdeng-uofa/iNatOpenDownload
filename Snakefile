@@ -73,38 +73,6 @@ def get_all_csvs(wildcards):
       folder_list.append(folder_path.replace(" ", "_"))
   return folder_list 
 
-# def get_all_csvs(wildcards):
-#   folder_list = []
-#   path = f'csvs/{wildcards.subset}_csvs/'
-#   for i in os.listdir(path):
-#     if i.endswith(".csv"):
-#       #print(i)
-#       df = pd.read_csv(f'{path}/{i}')
-#       #print(df["rank"][0])
-#       if (df["rank"][0] == "subspecies"):
-#         parent_taxa = df['ancestry'][0].split('/')[-1]
-
-#         parent_taxa_df = pd.read_sql_query(
-#             "SELECT taxon_id, rank_level, rank, name "
-#             "FROM taxa "
-#             f"WHERE taxon_id = {parent_taxa}",
-#             con = "sqlite:///dbs/inat_open_data.sq3db"
-#         )
-#         #print(parent_taxa_df["name"][0])
-#         taxon_name = i[::-1]
-#         taxon_name = taxon_name[4:]
-#         taxon_name = taxon_name[::-1]
-#         folder_path = f'imgs/{wildcards.subset}_all-imgs/{parent_taxa_df["name"][0]}_subspecies/{taxon_name}'
-#         folder_list.append(folder_path.replace(" ", "_"))
-#       else:
-#         taxon_name = i[::-1]
-#         taxon_name = taxon_name[4:]
-#         taxon_name = taxon_name[::-1]
-#         folder_path = f'imgs/{wildcards.subset}_all-imgs/{taxon_name}'
-#         folder_list.append(folder_path.replace(" ", "_"))
-#   #print(folder_list)
-#   return folder_list 
-
 def get_range_csvs(wildcards):
   folder_list = []
   path = f'csvs/{wildcards.subset}_csvs/'
@@ -134,18 +102,8 @@ rule download_upload_imgs_all:
     get_all_csvs
   output:
     "yaml/{subset}_all-imgs.yaml"
-  # shell:
-  #   "echo 'Download Complete' > {output}"
   run:
-    # subspecies_folders = []
-    # parent_folder
-    # for i in input:
-    # #parent_taxa = df['ancestry'][0].split('/')[-1]
-    #   if (i.split('/')[-2] == "species"):
-
-    #     os.system(f'mv {i} ')
     for i in input:
-      print(i)
       if (len(os.listdir(i)) == 1):
         os.system(f'rm -r {i}')
     os.system(f"echo 'Download Complete' > {output}")

@@ -154,7 +154,7 @@ sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
    ```
 6. Use snakemake to download and create the iNaturalist open data sqlite database. 
    ```
-   snakemake -c1
+   snakemake --cores
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -169,7 +169,8 @@ This snakemake rule downloads all images associated with a particular taxonomy.
 
 -The basic usage requires the user to use the snakemake command combined with a proper folder name of the taxonomy rank of interest
 ``` sh
-snakemake imgs/[taxonomy_rank]_all-imgs -c1
+snakemake csvs/[taxonomy_rank]_csvs --cores
+snakemake yaml/[taxonomy_rank]_all-imgs.yaml --cores
 ```
 -This will prompt the proper snakemake rules to activate and respective scripts to run.
 
@@ -178,14 +179,10 @@ snakemake imgs/[taxonomy_rank]_all-imgs -c1
 Enter a taxon name (i.e. Cigaritis): [taxonomy_name]
 Your taxon name is [taxonomy_name]
 
-Enter an input database (i.e. inat_open_data.sq3db): [input data base]
-Your taxon name is [input data base]
-
 Enter a rank (i.e. species): [rank level]
+Your input rank is [rank level]
 ```
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -220,7 +217,6 @@ Project Link: [https://github.com/zkdeng-uofa/iNatOpenDownload](https://github.c
 * University of Arizona Data Science Institute
 * Nirav Merchant - nirav@arizona.edu
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

@@ -61,28 +61,8 @@ parent_taxa_df = pd.read_sql_query(
   con = "sqlite:///dbs/inat_open_data.sq3db"
 )
 
-print(parent_taxa_df)
-
-# os.makedirs(args.output_folder, exist_ok=True)
-# for i in range(0, len(taxon_df)):
-#     sql = """SELECT photo_url_large, taxon_name, ancestry, extension
-#              FROM subset
-#              WHERE taxon_name = ? """
-#     photo_df = pd.read_sql_query(sql, url_con, params=[taxon_df['taxon_name'][i]])
-
-#     if not os.path.exists(args.output_folder):
-#       os.mkdir(args.output_folder)
-#     taxon_name = taxon_df['taxon_name'][i].replace('/', ' ')
-#     path = args.output_folder + '/' + taxon_name.replace(" ", "_") + '.csv'
-
-#     #print(path)
-#     photo_df.to_csv(path, index=False)
-
 os.makedirs(args.output_folder, exist_ok=True)
 for i in range(0, len(taxon_df)):
-    # sql = """SELECT photo_url_large, taxon_name, ancestry, extension
-    #          FROM subset
-    #          WHERE taxon_name = ? """
     sql = """SELECT *
              FROM subset
              WHERE taxon_name = ? """
@@ -91,22 +71,21 @@ for i in range(0, len(taxon_df)):
     taxon_name = taxon_df['taxon_name'][i].replace('/', ' ')
     path = args.output_folder + '/' + taxon_name.replace(" ", "_") + '.csv'
 
-    #print(path)
     photo_df.to_csv(path, index=False)
     
 
-taxon_name = args.output_folder
-taxon_name = taxon_name[4:]
-taxon_name = taxon_name[::-1]
-taxon_name = taxon_name[5:]
-taxon_name = taxon_name[::-1]
+# taxon_name = args.output_folder
+# taxon_name = taxon_name[4:]
+# taxon_name = taxon_name[::-1]
+# taxon_name = taxon_name[5:]
+# taxon_name = taxon_name[::-1]
 
-param_data = [
-  {'taxon_name': taxon_name},
-  {'start_index': 1},
-  {'end_index': len(taxon_df)}
-]
+# param_data = [
+#   {'taxon_name': taxon_name},
+#   {'start_index': 1},
+#   {'end_index': len(taxon_df)}
+# ]
 
-with open(f'yaml/{taxon_name}.yaml', 'w') as file:
-    documents = yaml.dump(param_data, file)
+# with open(f'yaml/{taxon_name}.yaml', 'w') as file:
+#     documents = yaml.dump(param_data, file)
   

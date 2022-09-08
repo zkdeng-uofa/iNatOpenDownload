@@ -25,9 +25,6 @@ parser.add_argument(
 args = parser.parse_args()
 
 def main():
-    #csv_list = glob(f'{args.input_folder}/*.csv')
-    #args.input_csv
-    #print(args.input_csv)
     df = pd.read_csv(args.input_csv)
 
     if (df["rank"][0] == "subspecies"):
