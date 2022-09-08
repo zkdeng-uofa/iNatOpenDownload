@@ -124,26 +124,43 @@ taxon_df = pd.read_sql_query(
 
 args.ancestry_string = f'{taxon_df["ancestry"][0]}/%'
 
-
-url_df = pd.read_sql_query(
-    "WITH urls AS (SELECT 'http://inaturalist-open-data.s3.amazonaws.com/photos/' AS photo_url) "
-    "SELECT B.*, U.photo_url || A.photo_id || '/' || 'large.' || A.extension AS photo_url_large, D.name AS taxon_name, D.ancestry, D.taxon_id, A.photo_id, A.photo_uuid, A.extension "
-    "FROM urls U "
-    "CROSS JOIN photos A "
-    "JOIN observers B "
-    "ON A.observer_id = B.observer_id "
-    "JOIN observations C "
-    "ON A.observation_uuid = C.observation_uuid "
-    "LEFT JOIN taxa D "
-    "ON C.taxon_id = D.taxon_id "
-    "WHERE D.ancestry LIKE '"+args.ancestry_string+"' "
-    "AND D.rank = '"+args.rank+"' "
-    "AND C.quality_grade = 'research' ",
-    #con = 'sqlite:///../db/inaturalist-open-data-20220127.sq3db'
-    #con = "sqlite:///../dbs/"+args.input_db
-    con = "sqlite:///dbs/"+args.input_db
-)
-
+if (args.rank == "species"):
+  url_df = pd.read_sql_query(
+      "WITH urls AS (SELECT 'http://inaturalist-open-data.s3.amazonaws.com/photos/' AS photo_url) "
+      "SELECT B.*, U.photo_url || A.photo_id || '/' || 'large.' || A.extension AS photo_url_large, D.name AS taxon_name, D.ancestry, D.taxon_id, D.rank, A.photo_id, A.photo_uuid, A.extension "
+      "FROM urls U "
+      "CROSS JOIN photos A "
+      "JOIN observers B "
+      "ON A.observer_id = B.observer_id "
+      "JOIN observations C "
+      "ON A.observation_uuid = C.observation_uuid "
+      "LEFT JOIN taxa D "
+      "ON C.taxon_id = D.taxon_id "
+      "WHERE (D.ancestry LIKE '"+args.ancestry_string+"' AND C.quality_grade = 'research' AND D.rank = 'species') "
+      "OR (D.ancestry LIKE '"+args.ancestry_string+"' AND C.quality_grade = 'research' AND D.rank = 'subspecies') ",
+      #con = 'sqlite:///../db/inaturalist-open-data-20220127.sq3db'
+      #con = "sqlite:///../dbs/"+args.input_db
+      con = "sqlite:///dbs/"+args.input_db
+  )
+else:
+  url_df = pd.read_sql_query(
+      "WITH urls AS (SELECT 'http://inaturalist-open-data.s3.amazonaws.com/photos/' AS photo_url) "
+      "SELECT B.*, U.photo_url || A.photo_id || '/' || 'large.' || A.extension AS photo_url_large, D.name AS taxon_name, D.ancestry, D.taxon_id, D.rank, A.photo_id, A.photo_uuid, A.extension "
+      "FROM urls U "
+      "CROSS JOIN photos A "
+      "JOIN observers B "
+      "ON A.observer_id = B.observer_id "
+      "JOIN observations C "
+      "ON A.observation_uuid = C.observation_uuid "
+      "LEFT JOIN taxa D "
+      "ON C.taxon_id = D.taxon_id "
+      "WHERE D.ancestry LIKE '"+args.ancestry_string+"' "
+      "AND D.rank = '"+args.rank+"' "
+      "AND C.quality_grade = 'research' ",
+      #con = 'sqlite:///../db/inaturalist-open-data-20220127.sq3db'
+      #con = "sqlite:///../dbs/"+args.input_db
+      con = "sqlite:///dbs/"+args.input_db
+  )
 #url_df.to_csv('../csvs/'+args.csv_name+'.csv', index=False)
 url_df.to_csv('csvs/'+args.csv_name+'.csv', index=False)
 
