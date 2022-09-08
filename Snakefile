@@ -122,14 +122,19 @@ rule range_species_download:
     " --input_csv {input}/{wildcards.species}.csv"
     " --data_dir imgs/{wildcards.subset}_{wildcards.min}-{wildcards.max}"
 
-# rule download_upload_imgs_range:
-#   input:
-#     get_range_csvs
-#   output:
-#     "yaml/{subset}_{min}-{max}.yaml"
-
-#   shell:
-#     "echo 'Download Complete' > {output}"
+rule download_upload_imgs_range:
+  input:
+    get_range_csvs
+  output:
+    "yaml/{subset}_{min}-{max}.yaml"
+  wildcard_constraints:
+    min = "\d+",
+    max = "\d+"
+  run:
+    for i in input:
+      if (len(os.listdir(i)) == 1):
+        os.system(f'rm -r {i}')
+    os.system(f"echo 'Download Complete' > {output}")
 
 rule tar_imgs:
   input:

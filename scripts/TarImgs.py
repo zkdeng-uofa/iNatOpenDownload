@@ -19,7 +19,6 @@ tar_name = f'{args.img_folder}.tar.gz'
 #tar = tarfile.open(f'{os.path.abspath(args.data_dir)}/{tar_name}', "w:gz")
 tar_path = f'tar_files/{args.img_folder}'
 
-
 os.makedirs(tar_path, exist_ok=True)
 
 tar = tarfile.open(f'{os.path.abspath(tar_path)}/{tar_name}', "w:gz")

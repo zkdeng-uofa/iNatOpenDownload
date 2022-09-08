@@ -182,6 +182,11 @@ Your taxon name is [taxonomy_name]
 Enter a rank (i.e. species): [rank level]
 Your input rank is [rank level]
 ```
+
+-The user can tar all the imgs into a single file and delete the img folders using the tar snakemake commands
+```sh
+snakemake tar_files/[taxonomy_rank]_all-imgs/[taxonomy_rank]_all-imgs.tar.gz --cores
+```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
