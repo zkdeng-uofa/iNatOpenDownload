@@ -73,7 +73,7 @@ if not len(sys.argv) > 1:
 
   while True:
     try:
-      args.rank = input('Enter a rank (i.e. species): ')
+      args.rank = input('Enter single rank query or "multi" (i.e. species): ')
       break
 
     except ValueError:
@@ -92,7 +92,7 @@ taxon_df = pd.read_sql_query(
 
 args.ancestry_string = f'{taxon_df["ancestry"][0]}/%'
 
-if (args.rank == "species"):
+if (args.rank == "species" or args.rank == "subspecies"):
   url_df = pd.read_sql_query(
       "WITH urls AS (SELECT 'http://inaturalist-open-data.s3.amazonaws.com/photos/' AS photo_url) "
       "SELECT B.*, U.photo_url || A.photo_id || '/' || 'large.' || A.extension AS photo_url_large, D.name AS taxon_name, D.ancestry, D.taxon_id, D.rank, A.photo_id, A.photo_uuid, A.extension "
@@ -104,8 +104,8 @@ if (args.rank == "species"):
       "ON A.observation_uuid = C.observation_uuid "
       "LEFT JOIN taxa D "
       "ON C.taxon_id = D.taxon_id "
-      "WHERE (D.ancestry LIKE '"+args.ancestry_string+"' AND C.quality_grade = 'research' AND D.rank = 'species') "
-      "OR (D.ancestry LIKE '"+args.ancestry_string+"' AND C.quality_grade = 'research' AND D.rank = 'subspecies') ",
+      "WHERE (D.name LIKE '"+args.taxon_name+"' AND C.quality_grade = 'research' AND D.rank = '"+args.rank+"') ",
+      # "OR (D.name LIKE '"+args.taxon_name+"' AND C.quality_grade = 'research' AND D.rank = 'subspecies') ",
       #con = "sqlite:///dbs/"+args.input_db
       con = "sqlite:///dbs/inat_open_data.sq3db"
   )
@@ -121,9 +121,8 @@ else:
       "ON A.observation_uuid = C.observation_uuid "
       "LEFT JOIN taxa D "
       "ON C.taxon_id = D.taxon_id "
-      "WHERE D.ancestry LIKE '"+args.ancestry_string+"' "
-      "AND D.rank = '"+args.rank+"' "
-      "AND C.quality_grade = 'research' ",
+      "WHERE (D.ancestry LIKE '"+args.ancestry_string+"' AND C.quality_grade = 'research' AND D.rank = 'species') "
+      "OR (D.ancestry LIKE '"+args.ancestry_string+"' AND C.quality_grade = 'research' AND D.rank = 'subspecies') ",
       #con = "sqlite:///dbs/"+args.input_db
       con = "sqlite:///dbs/inat_open_data.sq3db"
   )

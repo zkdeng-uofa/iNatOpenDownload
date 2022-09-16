@@ -25,7 +25,8 @@ tar = tarfile.open(f'{os.path.abspath(tar_path)}/{tar_name}', "w:gz")
 
 path = f'imgs/{args.img_folder}/'
 for i, val in enumerate(os.listdir(path)):
-    tar.add(f'imgs/{args.img_folder}/{val}', arcname=val)
-    shutil.rmtree(f'imgs/{args.img_folder}/{val}')
+    if (os.path.isdir(val)):
+        tar.add(f'imgs/{args.img_folder}/{val}', arcname=val)
+        shutil.rmtree(f'imgs/{args.img_folder}/{val}')
 
 tar.close()
