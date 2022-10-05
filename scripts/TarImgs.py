@@ -16,7 +16,6 @@ parser.add_argument(
 args = parser.parse_args()
 
 tar_name = f'{args.img_folder}.tar.gz'
-#tar = tarfile.open(f'{os.path.abspath(args.data_dir)}/{tar_name}', "w:gz")
 tar_path = f'tar_files/{args.img_folder}'
 
 os.makedirs(tar_path, exist_ok=True)
@@ -25,8 +24,8 @@ tar = tarfile.open(f'{os.path.abspath(tar_path)}/{tar_name}', "w:gz")
 
 path = f'imgs/{args.img_folder}/'
 for i, val in enumerate(os.listdir(path)):
-    if (os.path.isdir(val)):
-        tar.add(f'imgs/{args.img_folder}/{val}', arcname=val)
+    if (os.path.isdir(f'{path}/{val}')):
+        tar.add(f'{path}/{val}', arcname=val)
         shutil.rmtree(f'imgs/{args.img_folder}/{val}')
-
+shutil.rmtree(f'imgs/{args.img_folder}')
 tar.close()

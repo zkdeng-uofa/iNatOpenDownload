@@ -55,9 +55,17 @@ rule make_subset_url_db:
 
 rule create_subset_csv_files:
   input:
-    "dbs/{subset}_db.sq3db"
+    "dbs/normal-{subset}_db.sq3db"
   output:
-    directory("csvs/{subset}_csvs")
+    directory("csvs/normal-{subset}_csvs")
+  shell:
+    "python scripts/MakeSubsetCsvs.py --input_db {input} --output_folder {output}"
+
+rule create_new_imgs_csvs:
+  input:
+    "dbs/Updated-{query}.sq3db"
+  output:
+    directory("csvs/Updated-{query}_csvs")
   shell:
     "python scripts/MakeSubsetCsvs.py --input_db {input} --output_folder {output}"
 
@@ -97,7 +105,7 @@ rule all_species_download:
     " --input_csv {input}/{wildcards.species}.csv"
     " --data_dir imgs/{wildcards.subset}_all-imgs"
 
-rule download_upload_imgs_all:
+rule download_imgs_all:
   input:
     get_all_csvs
   output:
