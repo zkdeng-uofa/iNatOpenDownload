@@ -126,11 +126,11 @@ else:
       #con = "sqlite:///dbs/"+args.input_db
       con = "sqlite:///dbs/inat_open_data.sq3db"
   )
-url_df.to_csv('csvs/'+args.csv_name+'.csv', index=False)
+url_df.to_csv('csvs/Imgs-'+args.csv_name+'.csv', index=False)
 
 print('CSV Created')
 
-url_con = sqlite3.connect("dbs/"+args.output_db)
+url_con = sqlite3.connect("dbs/Imgs-"+args.output_db)
 url_df.to_sql("subset", url_con, if_exists="replace")
 
 cursor = url_con.cursor()

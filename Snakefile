@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 
+#################### --- Default Rules --- ####################
+
 rule all:
   input:
     # "awscliv2.zip",
@@ -8,6 +10,34 @@ rule all:
     "csvs/inat_meta_data",
     "dbs/inat_open_data.sq3db"
 
+#################### --- Functions --- ####################
+
+def get_all_csvs(wildcards):
+  folder_list = []
+  path = f'csvs/Imgs-{wildcards.subset}_csvs/'
+  for i in os.listdir(path):
+    if i.endswith(".csv"):
+      taxon_name = i[::-1]
+      taxon_name = taxon_name[4:]
+      taxon_name = taxon_name[::-1]
+      folder_path = f'imgs/Imgs-{wildcards.subset}/{taxon_name}'
+      folder_list.append(folder_path.replace(" ", "_"))
+  return folder_list 
+
+def get_range_csvs(wildcards):
+  folder_list = []
+  path = f'csvs/Imgs-{wildcards.subset}_csvs/'
+  for i, val in enumerate(os.listdir(path)):
+    if (i-1 >= int(wildcards.min)) & (i-1 <= int(wildcards.max)):
+      if val.endswith(".csv"):
+        taxon_name = val[::-1]
+        taxon_name = taxon_name[4:]
+        taxon_name = taxon_name[::-1]
+        folder_path = f'imgs/Imgs-{wildcards.subset}_{wildcards.min}-{wildcards.max}/{taxon_name}'
+        folder_list.append(folder_path.replace(" ", "_"))
+  return folder_list 
+
+########## --- iNaturalist Open Data DB Creation Rules --- ##########
 rule download_meta_data:
   output:
     "inaturalist-open-data-latest.tar.gz"
@@ -43,21 +73,25 @@ rule make_inat_db:
   script:
     "scripts/MakeiNatDB.py"
 
+#################### --- DB Creation Rules --- ####################
+
 rule make_subset_url_db:
   input:
     "dbs/inat_open_data.sq3db"
   output:
-    "dbs/{subset}_db.sq3db"
+    "dbs/Imgs-{subset}_db.sq3db"
   shell:
     """
     python scripts/SubsetOpenData.py
     """
 
+#################### --- CSV Creation Rules --- ####################
+
 rule create_subset_csv_files:
   input:
-    "dbs/normal-{subset}_db.sq3db"
+    "dbs/Imgs-{subset}_db.sq3db"
   output:
-    directory("csvs/normal-{subset}_csvs")
+    directory("csvs/Imgs-{subset}_csvs")
   shell:
     "python scripts/MakeSubsetCsvs.py --input_db {input} --output_folder {output}"
 
@@ -69,47 +103,24 @@ rule create_new_imgs_csvs:
   shell:
     "python scripts/MakeSubsetCsvs.py --input_db {input} --output_folder {output}"
 
-def get_all_csvs(wildcards):
-  folder_list = []
-  path = f'csvs/{wildcards.subset}_csvs/'
-  for i in os.listdir(path):
-    if i.endswith(".csv"):
-      taxon_name = i[::-1]
-      taxon_name = taxon_name[4:]
-      taxon_name = taxon_name[::-1]
-      folder_path = f'imgs/{wildcards.subset}_all-imgs/{taxon_name}'
-      folder_list.append(folder_path.replace(" ", "_"))
-  return folder_list 
-
-def get_range_csvs(wildcards):
-  folder_list = []
-  path = f'csvs/{wildcards.subset}_csvs/'
-  for i, val in enumerate(os.listdir(path)):
-    if (i-1 >= int(wildcards.min)) & (i-1 <= int(wildcards.max)):
-      if val.endswith(".csv"):
-        taxon_name = val[::-1]
-        taxon_name = taxon_name[4:]
-        taxon_name = taxon_name[::-1]
-        folder_path = f'imgs/{wildcards.subset}_{wildcards.min}-{wildcards.max}/{taxon_name}'
-        folder_list.append(folder_path.replace(" ", "_"))
-  return folder_list 
+#################### --- Image Download Rules --- ####################
 
 rule all_species_download:
   input:
-    "csvs/{subset}_csvs",
+    "csvs/Imgs-{subset}_csvs",
   output:
-    directory("imgs/{subset}_all-imgs/{species}")
+    directory("imgs/Imgs-{subset}/{species}")
   shell:
     "python scripts/SpeciesImgDownload.py" 
     " --input_folder {input}"
     " --input_csv {input}/{wildcards.species}.csv"
-    " --data_dir imgs/{wildcards.subset}_all-imgs"
+    " --data_dir imgs/Imgs-{wildcards.subset}"
 
 rule download_imgs_all:
   input:
     get_all_csvs
   output:
-    "yaml/{subset}_all-imgs.yaml"
+    "yaml/Imgs-{subset}.yaml"
   run:
     for i in input:
       if (len(os.listdir(i)) == 1):
@@ -144,6 +155,8 @@ rule download_upload_imgs_range:
         os.system(f'rm -r {i}')
     os.system(f"echo 'Download Complete' > {output}")
 
+#################### --- Compression Rules --- ####################
+
 rule tar_imgs:
   input:
     "yaml/{img_folder}.yaml"
@@ -152,7 +165,9 @@ rule tar_imgs:
   shell:
     "python scripts/TarImgs.py"
     " --img_folder {wildcards.img_folder}"
-  
+
+#################### --- Cyverse Rules --- ####################
+
 rule cyverse_csv_upload:
   input:
     "csvs/{subset}_csvs"
@@ -173,9 +188,13 @@ rule cyverse_csv_download:
     iget -rfPT /iplant/home/shared/soynomics/inaturalist/iNatOpenDownload/{wildcards.subset}_csvs csvs/{wildcards.subset}_csvs
     """
 
+#################### --- Test Rules --- ####################
+
 rule clean:
   shell:
     """
-    rm -Rf csvs/*_csvs
-    rm -f dbs/*_db.sq3db
+    rm -rfv csvs/*_csvs
+    rm -rfv dbs/*_db.sq3db
+    rm -rfv imgs/*_all-imgs
+    rm -rfv yaml/_all-imgs.yaml
     """
