@@ -43,7 +43,7 @@ def main():
         try: 
             img2dataset.download(
                 processes_count=1,
-                thread_count=256,
+                thread_count=64,
                 url_list=args.input_csv,
                 output_folder=output_folder,
                 output_format='webdataset',
@@ -60,7 +60,7 @@ def main():
         try: 
             img2dataset.download(
                 processes_count=1,
-                thread_count=256,
+                thread_count=64,
                 url_list=args.input_csv,
                 output_folder=output_folder,
                 output_format='webdataset',
