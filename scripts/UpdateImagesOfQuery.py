@@ -70,7 +70,7 @@ new_imgs_df.to_csv(f'csvs/Updated-{args.query_name}.csv', index=False)
 
 #print(new_imgs_df)
 
-new_imgs_con = sqlite3.connect(f'dbs/Updated-{args.query_name}.sq3db')
+new_imgs_con = sqlite3.connect(f'dbs/Update-{args.query_name}_db.sq3db')
 new_imgs_df.to_sql("subset", new_imgs_con, if_exists="replace")
 
 cursor = new_imgs_con.cursor()

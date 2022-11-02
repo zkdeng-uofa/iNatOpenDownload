@@ -24,6 +24,18 @@ def get_all_csvs(wildcards):
       folder_list.append(folder_path.replace(" ", "_"))
   return folder_list 
 
+def get_update_csvs(wildcards):
+  folder_list = []
+  path = f'csvs/Update-{wildcards.subset}_csvs/'
+  for i in os.listdir(path):
+    if i.endswith(".csv"):
+      taxon_name = i[::-1]
+      taxon_name = taxon_name[4:]
+      taxon_name = taxon_name[::-1]
+      folder_path = f'imgs/Update-{wildcards.subset}/{taxon_name}'
+      folder_list.append(folder_path.replace(" ", "_"))
+  return folder_list 
+
 def get_range_csvs(wildcards):
   folder_list = []
   path = f'csvs/Imgs-{wildcards.subset}_csvs/'
@@ -85,6 +97,15 @@ rule make_subset_url_db:
     python scripts/SubsetOpenData.py
     """
 
+rule make_update_db:
+  input:
+    "csvs/Imgs-{subset}.csv"
+  output:
+    "dbs/Update-{subset}_db.sq3db"
+  shell:
+    """
+    python scripts/UpdateImagesOfQuery.py
+    """
 #################### --- CSV Creation Rules --- ####################
 
 rule create_subset_csv_files:
@@ -97,9 +118,9 @@ rule create_subset_csv_files:
 
 rule create_new_imgs_csvs:
   input:
-    "dbs/Updated-{query}.sq3db"
+    "dbs/Update-{query}_db.sq3db"
   output:
-    directory("csvs/Updated-{query}_csvs")
+    directory("csvs/Update-{query}_csvs")
   shell:
     "python scripts/MakeSubsetCsvs.py --input_db {input} --output_folder {output}"
 
@@ -121,6 +142,29 @@ rule download_imgs_all:
     get_all_csvs
   output:
     "yaml/Imgs-{subset}.yaml"
+  run:
+    for i in input:
+      if (len(os.listdir(i)) == 1):
+        os.system(f'rm -r {i}')
+    os.system(f"echo 'Download Complete' > {output}")
+
+
+rule update_species_download:
+  input:
+    "csvs/Update-{subset}_csvs",
+  output:
+    directory("imgs/Update-{subset}/{species}")
+  shell:
+    "python scripts/SpeciesImgDownload.py" 
+    " --input_folder {input}"
+    " --input_csv {input}/{wildcards.species}.csv"
+    " --data_dir imgs/Update-{wildcards.subset}"
+
+rule download_imgs_update:
+  input:
+    get_update_csvs
+  output:
+    "yaml/Update-{subset}.yaml"
   run:
     for i in input:
       if (len(os.listdir(i)) == 1):
