@@ -157,7 +157,7 @@ rule download_upload_imgs_range:
 
 #################### --- Compression Rules --- ####################
 
-rule tar_imgs:
+rule compress_imgs:
   input:
     "yaml/{img_folder}.yaml"
   output:
